@@ -2,7 +2,7 @@ import React from 'react';
 
 class AddLine extends React.Component {
     render() {
-        return(
+        return (
             <button>Add line</button>
         )
     }
