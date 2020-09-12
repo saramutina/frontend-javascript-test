@@ -4,6 +4,10 @@ import TableRow from '../TableRow/TableRow';
 
 class Table extends React.Component {
     render() {
+        if (this.props.data === null){
+            return null;
+        }
+
         return (
             <table style={{width: '100%'}}>
                 <thead>
