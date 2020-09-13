@@ -6,6 +6,8 @@ import AddLine from '../AddLine/AddLine';
 import Table from '../Table/Table';
 import Pagination from '../Pagination/Pagination';
 import SelectedLine from '../SelectedLine/SelectedLine';
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 export const URL_SMALL = 'http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
 export const URL_BIG = 'http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
@@ -19,7 +21,8 @@ class App extends React.Component {
       selectedData: null,
       url: URL_SMALL,
       currentPage: 1,
-      currentPageData: null
+      currentPageData: null,
+      isDataLoading: false
     }
   }
 
@@ -29,17 +32,20 @@ class App extends React.Component {
 
   loadData = async () => {
     try{
+      this.setState({isDataLoading: true});
       const response = await fetch(this.state.url);
       if (response.ok) {
         let jsonResponse = await response.json();
         this.setState({
           selectedData: jsonResponse, 
-          currentPageData: jsonResponse.slice(0, PAGE_SIZE) 
+          currentPageData: jsonResponse.slice(0, PAGE_SIZE),
+          isDataLoading: false 
         });
       }  
     }
     catch(error){
       console.log(error);
+      this.setState({isDataLoading: false});
     }
   }
 
@@ -64,6 +70,13 @@ class App extends React.Component {
             url={this.state.url} 
             changeUrl={this.chooseDataSize} 
             loadData={this.loadData} 
+          />
+          <Loader
+            type="Oval"
+            color="#00BFFF"
+            height={100}
+            width={100}
+            visible={this.state.isDataLoading}
           />
         </div>
         <div>
