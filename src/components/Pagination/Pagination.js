@@ -19,6 +19,9 @@ class Pagination extends React.Component {
         return (
             <div>
                 {this.renderPages()}
+                {!!this.props.totalSize && <p>
+                    Page number: {this.props.currentPage}
+                </p>}
             </div>
         )
     }

@@ -22,30 +22,32 @@ class App extends React.Component {
       url: URL_SMALL,
       currentPage: 1,
       currentPageData: null,
-      isDataLoading: false
+      isDataLoading: false,
+      sortOrder: null,
+      sortByColumn: null
     }
   }
 
   chooseDataSize = (url) => {
-    this.setState({url});
+    this.setState({ url });
   }
 
   loadData = async () => {
-    try{
-      this.setState({isDataLoading: true});
+    try {
+      this.setState({ isDataLoading: true });
       const response = await fetch(this.state.url);
       if (response.ok) {
         let jsonResponse = await response.json();
         this.setState({
-          selectedData: jsonResponse, 
+          selectedData: jsonResponse,
           currentPageData: jsonResponse.slice(0, PAGE_SIZE),
-          isDataLoading: false 
+          isDataLoading: false
         });
-      }  
+      }
     }
-    catch(error){
+    catch (error) {
       console.log(error);
-      this.setState({isDataLoading: false});
+      this.setState({ isDataLoading: false });
     }
   }
 
@@ -56,20 +58,58 @@ class App extends React.Component {
     });
   }
 
+  sortTable = (column, order) => {
+    const dataToSort = this.state.selectedData;
+    const compareFunc = (a, b) => {
+      if (order === 'ascending') {
+        if (column === "id") {
+          return a.id - b.id;
+        }
+        if (a[column] < b[column]) {
+          return -1;
+        }
+        if (a[column] > b[column]) {
+          return 1;
+        }
+        return 0;
+      }
+      if (order === 'descending') {
+        if (column === "id") {
+          return b.id - a.id;
+        }
+        if (a[column] < b[column]) {
+          return 1;
+        }
+        if (a[column] > b[column]) {
+          return -1;
+        }
+        return 0;
+      }
+    }
+    const sortedData = dataToSort.sort(compareFunc);
+    this.setState({
+      selectedData: sortedData,
+      currentPageData: sortedData.slice(0, PAGE_SIZE),
+      currentPage: 1,
+      sortOrder: order,
+      sortByColumn: column
+    });
+  }
+
   changeSelectedRow = (row) => {
-    this.setState({selectedRow: row});
+    this.setState({ selectedRow: row });
   }
 
   render() {
     const totalSize = (this.state.selectedData ? this.state.selectedData.length : 0);
 
-    return(
+    return (
       <div>
         <div>
-          <ChooseData 
-            url={this.state.url} 
-            changeUrl={this.chooseDataSize} 
-            loadData={this.loadData} 
+          <ChooseData
+            url={this.state.url}
+            changeUrl={this.chooseDataSize}
+            loadData={this.loadData}
           />
           <Loader
             type="Oval"
@@ -84,16 +124,20 @@ class App extends React.Component {
           <AddLine />
         </div>
         <div>
-          <Table 
-            data={this.state.currentPageData} 
-            selectRow={this.changeSelectedRow} 
+          <Table
+            data={this.state.currentPageData}
+            selectRow={this.changeSelectedRow}
+            sortTable={this.sortTable}
+            sortOrder={this.state.sortOrder}
+            chosenColumn={this.state.sortByColumn}
           />
-          <Pagination 
-            changePage={this.changePage} 
-            totalSize={totalSize} 
+          <Pagination
+            changePage={this.changePage}
+            totalSize={totalSize}
+            currentPage={this.state.currentPage}
           />
-          <SelectedLine 
-            row={this.state.selectedRow} 
+          <SelectedLine
+            row={this.state.selectedRow}
           />
         </div>
       </div>

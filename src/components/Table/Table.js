@@ -1,6 +1,7 @@
 import React from 'react';
 import './Table.css';
 import TableRow from '../TableRow/TableRow';
+import TableHeader from '../TableHeader/TableHeader';
 
 class Table extends React.Component {
     render() {
@@ -12,11 +13,36 @@ class Table extends React.Component {
             <table style={{ width: '100%' }}>
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>E-mail</th>
-                        <th>Phone</th>
+                        <TableHeader
+                            value="id"
+                            sortTable={this.props.sortTable}
+                            sortOrder={this.props.sortOrder}
+                            chosenColumn={this.props.chosenColumn}
+                        />
+                        <TableHeader
+                            value="firstName"
+                            sortTable={this.props.sortTable}
+                            sortOrder={this.props.sortOrder}
+                            chosenColumn={this.props.chosenColumn}
+                        />
+                        <TableHeader
+                            value="lastName"
+                            sortTable={this.props.sortTable}
+                            sortOrder={this.props.sortOrder}
+                            chosenColumn={this.props.chosenColumn}
+                        />
+                        <TableHeader
+                            value="email"
+                            sortTable={this.props.sortTable}
+                            sortOrder={this.props.sortOrder}
+                            chosenColumn={this.props.chosenColumn}
+                        />
+                        <TableHeader
+                            value="phone"
+                            sortTable={this.props.sortTable}
+                            sortOrder={this.props.sortOrder}
+                            chosenColumn={this.props.chosenColumn}
+                        />
                     </tr>
                 </thead>
                 <tbody>
