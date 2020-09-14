@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import ChooseData from '../ChooseData/ChooseData';
 import SearchBar from '../SearchBar/SearchBar';
-import AddLine from '../AddLine/AddLine';
 import Table from '../Table/Table';
 import Pagination from '../Pagination/Pagination';
 import SelectedLine from '../SelectedLine/SelectedLine';
@@ -155,7 +154,6 @@ class App extends React.Component {
             searchInfo={this.state.searchInfo}
             changeSearchInfo={this.changeSearchInfo}
           />
-          <AddLine />
         </div>
         <div>
           <Table
