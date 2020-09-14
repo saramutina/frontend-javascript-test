@@ -17,6 +17,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      allData: null,
       selectedRow: null,
       selectedData: null,
       url: URL_SMALL,
@@ -24,7 +25,8 @@ class App extends React.Component {
       currentPageData: null,
       isDataLoading: false,
       sortOrder: null,
-      sortByColumn: null
+      sortByColumn: null,
+      searchInfo: ''
     }
   }
 
@@ -40,8 +42,10 @@ class App extends React.Component {
         let jsonResponse = await response.json();
         this.setState({
           selectedData: jsonResponse,
+          allData: jsonResponse,
           currentPageData: jsonResponse.slice(0, PAGE_SIZE),
-          isDataLoading: false
+          isDataLoading: false,
+          searchInfo: '',
         });
       }
     }
@@ -52,9 +56,10 @@ class App extends React.Component {
   }
 
   changePage = (newPageNumber) => {
+    const dataToShow = this.state.selectedData;
     this.setState({
       currentPage: newPageNumber,
-      currentPageData: this.state.selectedData.slice(PAGE_SIZE * (newPageNumber - 1), PAGE_SIZE * newPageNumber)
+      currentPageData: dataToShow.slice(PAGE_SIZE * (newPageNumber - 1), PAGE_SIZE * newPageNumber)
     });
   }
 
@@ -100,6 +105,31 @@ class App extends React.Component {
     this.setState({ selectedRow: row });
   }
 
+  filter = () => {
+    const { searchInfo, allData } = this.state;
+    if (!allData) {
+      return;
+    };
+
+    const filterFunc = (element) => {
+      return (element.id.toString().toLowerCase().indexOf(searchInfo.toLowerCase()) !== -1) ||
+        (element.firstName.toLowerCase().indexOf(searchInfo.toLowerCase()) !== -1) ||
+        (element.lastName.toLowerCase().indexOf(searchInfo.toLowerCase()) !== -1) ||
+        (element.email.toLowerCase().indexOf(searchInfo.toLowerCase()) !== -1) ||
+        (element.phone.toLowerCase().indexOf(searchInfo.toLowerCase()) !== -1)
+    }
+    const filteredData = allData.filter(filterFunc);
+    this.setState({
+      selectedData: filteredData,
+      currentPageData: filteredData.slice(0, PAGE_SIZE),
+      currentPage: 1
+    });
+  }
+
+  changeSearchInfo = (newSearchInfo) => {
+    this.setState({ searchInfo: newSearchInfo });
+  }
+
   render() {
     const totalSize = (this.state.selectedData ? this.state.selectedData.length : 0);
 
@@ -120,7 +150,11 @@ class App extends React.Component {
           />
         </div>
         <div>
-          <SearchBar />
+          <SearchBar
+            filter={this.filter}
+            searchInfo={this.state.searchInfo}
+            changeSearchInfo={this.changeSearchInfo}
+          />
           <AddLine />
         </div>
         <div>
