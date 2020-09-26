@@ -1,8 +1,8 @@
 Features of this app: 
-• Data is loaded from the server. Choose "small" or "big" to select the size of data you want to load from the server.
-• Sorting. You can click on each table header to sort by ascending, another click will sort by descending. The indicator near chosen header shows the order of sorting.
-• Pagination. Each page contains 50 elements (lines of table) per page. You can click on pages below the table to navigate through table. Current page is indicated by text.
-• Filtration. You can write any text in the input field next to "Search" button and then click that button to filter contents of the table. It would show only rows of data that include information that you search for.
+  • Data is loaded from the server. Choose "small" or "big" to select the size of data you want to load from the server.
+  • Sorting. You can click on each table header to sort by ascending, another click will sort by descending. The indicator near chosen header shows the order of sorting.
+  • Pagination. Each page contains 50 elements (lines of table) per page. You can click on pages below the table to navigate through table. Current page is indicated by text.
+  • Filtration. You can write any text in the input field next to "Search" button and then click that button to filter contents of the table. It would show only rows of data that include information that you search for.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
